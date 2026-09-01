@@ -4,6 +4,8 @@ import br.com.guilherme.urlshortener.model.Url;
 import br.com.guilherme.urlshortener.repository.UrlRepository;
 import org.springframework.stereotype.Service;
 
+import br.com.guilherme.urlshortener.exception.UrlNotFoundException;
+
 import java.security.SecureRandom;
 
 @Service
@@ -52,10 +54,15 @@ public class UrlService {
 
     public Url getByShortCode(String shortCode) {
         Url url = urlRepository.findByShortCode(shortCode)
-                .orElseThrow(() -> new RuntimeException("URL não encontrada"));
+                .orElseThrow(() -> new UrlNotFoundException(shortCode));
 
         url.setClickCount(url.getClickCount() + 1);
 
         return urlRepository.save(url);
+    }
+
+    public Url findByShortCode(String shortCode) {
+        return urlRepository.findByShortCode(shortCode)
+                .orElseThrow(() -> new UrlNotFoundException(shortCode));
     }
 }

@@ -34,4 +34,20 @@ public class UrlController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @GetMapping("/{shortCode}")
+    public ResponseEntity<UrlResponse> getUrl(
+            @PathVariable String shortCode) {
+
+        Url url = urlService.findByShortCode(shortCode);
+
+        UrlResponse response = new UrlResponse(
+                url.getOriginalUrl(),
+                url.getShortCode(),
+                "http://localhost:8080/" + url.getShortCode(),
+                url.getClickCount()
+        );
+
+        return ResponseEntity.ok(response);
+    }
 }
