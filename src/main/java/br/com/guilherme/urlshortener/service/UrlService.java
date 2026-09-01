@@ -49,4 +49,13 @@ public class UrlService {
 
         return builder.toString();
     }
+
+    public Url getByShortCode(String shortCode) {
+        Url url = urlRepository.findByShortCode(shortCode)
+                .orElseThrow(() -> new RuntimeException("URL não encontrada"));
+
+        url.setClickCount(url.getClickCount() + 1);
+
+        return urlRepository.save(url);
+    }
 }
