@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/urls")
@@ -28,7 +29,11 @@ public class UrlController {
         UrlResponse response = new UrlResponse(
                 url.getOriginalUrl(),
                 url.getShortCode(),
-                "http://localhost:8080/" + url.getShortCode(),
+                ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("/")
+                        .path(url.getShortCode())
+                        .toUriString(),
                 url.getClickCount()
         );
 
@@ -44,7 +49,11 @@ public class UrlController {
         UrlResponse response = new UrlResponse(
                 url.getOriginalUrl(),
                 url.getShortCode(),
-                "http://localhost:8080/" + url.getShortCode(),
+                ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .path("/")
+                        .path(url.getShortCode())
+                        .toUriString(),
                 url.getClickCount()
         );
 
