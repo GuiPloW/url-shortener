@@ -10,6 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "URLs", description = "Operações para encurtamento e consulta de URLs")
+
 @RestController
 @RequestMapping("/api/urls")
 public class UrlController {
@@ -19,6 +26,15 @@ public class UrlController {
     public UrlController(UrlService urlService) {
         this.urlService = urlService;
     }
+
+    @Operation(
+            summary = "Encurtar uma URL",
+            description = "Recebe uma URL original e gera um código curto único."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "URL encurtada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "URL informada é inválida")
+    })
 
     @PostMapping
     public ResponseEntity<UrlResponse> createShortUrl(
@@ -39,6 +55,15 @@ public class UrlController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @Operation(
+            summary = "Consultar uma URL",
+            description = "Retorna as informações de uma URL a partir do código curto."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "URL encontrada"),
+            @ApiResponse(responseCode = "404", description = "Código curto não encontrado")
+    })
 
     @GetMapping("/{shortCode}")
     public ResponseEntity<UrlResponse> getUrl(
